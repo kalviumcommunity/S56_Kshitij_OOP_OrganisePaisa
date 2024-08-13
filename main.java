@@ -5,27 +5,27 @@ class Expense {
     private String category;
 
     public Expense(String description, double amount, String category) {
-        description = description;  // Assigning parameters to instance variables
-        amount = amount;
-        category = category;
+        this.description = description;  // Using 'this' to refer to instance variables
+        this.amount = amount;
+        this.category = category;
     }
 
     // Getter methods
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public double getAmount() {
-        return amount;
+        return this.amount;
     }
 
     public String getCategory() {
-        return category;
+        return this.category;
     }
 
     @Override
     public String toString() {
-        return "Description: " + description + ", Amount: $" + amount + ", Category: " + category;
+        return "Description: " + this.description + ", Amount: $" + this.amount + ", Category: " + this.category;
     }
 }
 
