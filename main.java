@@ -5,11 +5,18 @@ class Expense {
     private String description;
     private double amount;
     private String category;
+    // Static variable to count number of expenses created
+    private static int totalExpenses = 0;
+    // Static variable to count total amount spent across all expenses
+    private static double totalAmountSpent = 0;
 
     public Expense(String description, double amount, String category) {
         this.description = description;  // Using 'this' to refer to instance variables
         this.amount = amount;
         this.category = category;
+        // Increment the static variables whenever a new Expense is created
+        totalExpenses++;
+        totalAmountSpent += amount;
     }
 
     // Getter methods
@@ -24,6 +31,17 @@ class Expense {
     public String getCategory() {
         return this.category;
     }
+
+    // Static method to get the total number of expenses
+    public static int getTotalExpenses() {
+        return totalExpenses;
+    }
+
+    // Static method to get the total amount spent
+    public static double getTotalAmountSpent() {
+        return totalAmountSpent;
+    }
+
 
     @Override
     public String toString() {
@@ -82,6 +100,9 @@ class ExpenseTracker {
             System.out.println(this.expenses[i]);
         }
         System.out.println("Total Expenses: $" + total);
+        // Showing the static variable values in the summary
+        System.out.println("Total number of expenses: " + Expense.getTotalExpenses());
+        System.out.println("Total amount spent: $" + Expense.getTotalAmountSpent());
     }
 }
 
