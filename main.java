@@ -117,7 +117,9 @@ public class Main {
                     scanner.nextLine();  // Consume newline
                     System.out.print("Enter category (eg., Food, Utilities, Entertainment): ");
                     String category = scanner.nextLine();
-                    expenseTracker.addExpense(new Expense(description, amount, category));
+                    Expense expense = new Expense(description, amount, category);
+                    expenseTracker.addExpense(expense);
+
                     break;
                 case 2:
                     expenseTracker.listExpenses();
