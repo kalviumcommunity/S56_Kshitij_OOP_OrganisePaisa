@@ -32,12 +32,12 @@ class Expense {
         return this.category;
     }
 
-    // Static method to get the total number of expenses
+    // Static method to get the total number of expenses (Static Member Function)
     public static int getTotalExpenses() {
         return totalExpenses;
     }
 
-    // Static method to get the total amount spent
+     // Static method to get the total amount spent (Static Member Function)
     public static double getTotalAmountSpent() {
         return totalAmountSpent;
     }
@@ -100,7 +100,8 @@ class ExpenseTracker {
             System.out.println(this.expenses[i]);
         }
         System.out.println("Total Expenses: $" + total);
-        // Showing the static variable values in the summary
+         // Showing the static variable values in the summary
+        // Static member function to get total number of expenses
         System.out.println("Total number of expenses: " + Expense.getTotalExpenses());
         System.out.println("Total amount spent: $" + Expense.getTotalAmountSpent());
     }
