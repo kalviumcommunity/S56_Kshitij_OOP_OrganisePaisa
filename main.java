@@ -118,6 +118,7 @@ class ExpenseTracker {
     }
 }
 
+
 // Main class for user interaction
 public class Main {
     public static void main(String[] args) {
