@@ -7,27 +7,43 @@ class Expense {
     private String category;
 
     public Expense(String description, double amount, String category) {
-        this.description = description;  // Using 'this' to refer to instance variables
-        this.amount = amount;
-        this.category = category;
+        setDescription(description);  // Using mutators
+        setAmount(amount);
+        setCategory(category);
     }
 
-    // Getter methods
+    // Getter and Setter methods (Accessors and Mutators)
     public String getDescription() {
         return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public double getAmount() {
         return this.amount;
     }
 
+    public void setAmount(double amount) {
+        if (amount > 0) {
+            this.amount = amount;
+        } else {
+            System.out.println("Amount should be positive.");
+        }
+    }
+
     public String getCategory() {
         return this.category;
     }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
-        return "Description: " + this.description + ", Amount: $" + this.amount + ", Category: " + this.category;
+        return "Description: " + getDescription() + ", Amount: Rs. " + getAmount() + ", Category: " + getCategory();  // Using accessors
     }
 }
 
@@ -37,14 +53,31 @@ class ExpenseTracker {
     private int count;
 
     public ExpenseTracker(int size) {
-        this.expenses = new Expense[size];
-        this.count = 0;
+        setExpenses(new Expense[size]);
+        setCount(0);
+    }
+
+    // Getter and Setter methods for private variables
+    public Expense[] getExpenses() {
+        return this.expenses;
+    }
+
+    public void setExpenses(Expense[] expenses) {
+        this.expenses = expenses;
+    }
+
+    public int getCount() {
+        return this.count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public void addExpense(Expense expense) {
-        if (count < expenses.length) {
-            this.expenses[count] = expense;
-            this.count++;
+        if (getCount() < getExpenses().length) {
+            this.expenses[getCount()] = expense;
+            setCount(getCount() + 1);
             System.out.println("Expense added successfully.");
         } else {
             System.out.println("Cannot add more expenses. Array is full.");
@@ -52,20 +85,20 @@ class ExpenseTracker {
     }
 
     public void listExpenses() {
-        if (count == 0) {
+        if (getCount() == 0) {
             System.out.println("No expenses recorded.");
         } else {
-            for (int i = 0; i < count; i++) {
-                System.out.println(this.expenses[i]);
+            for (int i = 0; i < getCount(); i++) {
+                System.out.println(getExpenses()[i]);
             }
         }
     }
 
     public void listExpensesByCategory(String category) {
         boolean found = false;
-        for (int i = 0; i < count; i++) {
-            if (this.expenses[i].getCategory().equalsIgnoreCase(category)) {
-                System.out.println(this.expenses[i]);
+        for (int i = 0; i < getCount(); i++) {
+            if (getExpenses()[i].getCategory().equalsIgnoreCase(category)) {
+                System.out.println(getExpenses()[i]);
                 found = true;
             }
         }
@@ -77,11 +110,11 @@ class ExpenseTracker {
     public void showSummary() {
         double total = 0;
         System.out.println("\nExpense Summary:");
-        for (int i = 0; i < count; i++) {
-            total += this.expenses[i].getAmount();
-            System.out.println(this.expenses[i]);
+        for (int i = 0; i < getCount(); i++) {
+            total += getExpenses()[i].getAmount();
+            System.out.println(getExpenses()[i]);
         }
-        System.out.println("Total Expenses: $" + total);
+        System.out.println("Total Expenses: Rs. " + total);
     }
 }
 
@@ -119,7 +152,6 @@ public class Main {
                     String category = scanner.nextLine();
                     Expense expense = new Expense(description, amount, category);
                     expenseTracker.addExpense(expense);
-
                     break;
                 case 2:
                     expenseTracker.listExpenses();
