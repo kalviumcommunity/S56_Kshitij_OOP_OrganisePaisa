@@ -5,45 +5,47 @@ class Expense {
     private String description;
     private double amount;
     private String category;
+    // Static variable to count number of expenses created
+    private static int totalExpenses = 0;
+    // Static variable to count total amount spent across all expenses
+    private static double totalAmountSpent = 0;
 
     public Expense(String description, double amount, String category) {
-        setDescription(description);  // Using mutators
-        setAmount(amount);
-        setCategory(category);
+        this.description = description;  // Using 'this' to refer to instance variables
+        this.amount = amount;
+        this.category = category;
+        // Increment the static variables whenever a new Expense is created
+        totalExpenses++;
+        totalAmountSpent += amount;
     }
 
-    // Getter and Setter methods (Accessors and Mutators)
+    // Getter methods
     public String getDescription() {
         return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public double getAmount() {
         return this.amount;
     }
 
-    public void setAmount(double amount) {
-        if (amount > 0) {
-            this.amount = amount;
-        } else {
-            System.out.println("Amount should be positive.");
-        }
-    }
-
     public String getCategory() {
         return this.category;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    // Static method to get the total number of expenses (Static Member Function)
+    public static int getTotalExpenses() {
+        return totalExpenses;
     }
+
+     // Static method to get the total amount spent (Static Member Function)
+    public static double getTotalAmountSpent() {
+        return totalAmountSpent;
+    }
+
 
     @Override
     public String toString() {
-        return "Description: " + getDescription() + ", Amount: Rs. " + getAmount() + ", Category: " + getCategory();  // Using accessors
+        return "Description: " + this.description + ", Amount: $" + this.amount + ", Category: " + this.category;
     }
 }
 
@@ -53,31 +55,14 @@ class ExpenseTracker {
     private int count;
 
     public ExpenseTracker(int size) {
-        setExpenses(new Expense[size]);
-        setCount(0);
-    }
-
-    // Getter and Setter methods for private variables
-    public Expense[] getExpenses() {
-        return this.expenses;
-    }
-
-    public void setExpenses(Expense[] expenses) {
-        this.expenses = expenses;
-    }
-
-    public int getCount() {
-        return this.count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
+        this.expenses = new Expense[size];
+        this.count = 0;
     }
 
     public void addExpense(Expense expense) {
-        if (getCount() < getExpenses().length) {
-            this.expenses[getCount()] = expense;
-            setCount(getCount() + 1);
+        if (count < expenses.length) {
+            this.expenses[count] = expense;
+            this.count++;
             System.out.println("Expense added successfully.");
         } else {
             System.out.println("Cannot add more expenses. Array is full.");
@@ -85,20 +70,20 @@ class ExpenseTracker {
     }
 
     public void listExpenses() {
-        if (getCount() == 0) {
+        if (count == 0) {
             System.out.println("No expenses recorded.");
         } else {
-            for (int i = 0; i < getCount(); i++) {
-                System.out.println(getExpenses()[i]);
+            for (int i = 0; i < count; i++) {
+                System.out.println(this.expenses[i]);
             }
         }
     }
 
     public void listExpensesByCategory(String category) {
         boolean found = false;
-        for (int i = 0; i < getCount(); i++) {
-            if (getExpenses()[i].getCategory().equalsIgnoreCase(category)) {
-                System.out.println(getExpenses()[i]);
+        for (int i = 0; i < count; i++) {
+            if (this.expenses[i].getCategory().equalsIgnoreCase(category)) {
+                System.out.println(this.expenses[i]);
                 found = true;
             }
         }
@@ -110,14 +95,17 @@ class ExpenseTracker {
     public void showSummary() {
         double total = 0;
         System.out.println("\nExpense Summary:");
-        for (int i = 0; i < getCount(); i++) {
-            total += getExpenses()[i].getAmount();
-            System.out.println(getExpenses()[i]);
+        for (int i = 0; i < count; i++) {
+            total += this.expenses[i].getAmount();
+            System.out.println(this.expenses[i]);
         }
-        System.out.println("Total Expenses: Rs. " + total);
+        System.out.println("Total Expenses: $" + total);
+         // Showing the static variable values in the summary
+        // Static member function to get total number of expenses
+        System.out.println("Total number of expenses: " + Expense.getTotalExpenses());
+        System.out.println("Total amount spent: $" + Expense.getTotalAmountSpent());
     }
 }
-
 
 // Main class for user interaction
 public class Main {
@@ -153,6 +141,7 @@ public class Main {
                     String category = scanner.nextLine();
                     Expense expense = new Expense(description, amount, category);
                     expenseTracker.addExpense(expense);
+
                     break;
                 case 2:
                     expenseTracker.listExpenses();
