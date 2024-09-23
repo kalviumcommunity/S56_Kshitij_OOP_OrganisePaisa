@@ -6,13 +6,14 @@ class Expense {
     private double amount;
     private String category;
 
+    // Public constructor
     public Expense(String description, double amount, String category) {
         setDescription(description);  // Using mutators
         setAmount(amount);
         setCategory(category);
     }
 
-    // Getter and Setter methods (Accessors and Mutators)
+    // Public Getter and Setter methods (Accessors and Mutators)
     public String getDescription() {
         return this.description;
     }
@@ -41,6 +42,11 @@ class Expense {
         this.category = category;
     }
 
+    // Protected method: Only accessible within this class, package, and subclasses
+    protected void printExpenseDetails() {
+        System.out.println("Expense Details: " + getDescription() + ", Rs. " + getAmount() + ", " + getCategory());
+    }
+
     @Override
     public String toString() {
         return "Description: " + getDescription() + ", Amount: Rs. " + getAmount() + ", Category: " + getCategory();  // Using accessors
@@ -49,20 +55,22 @@ class Expense {
 
 // ExpenseTracker class for managing expenses
 class ExpenseTracker {
+    // Private data members (encapsulation)
     private Expense[] expenses;
     private int count;
 
+    // Public constructor
     public ExpenseTracker(int size) {
         setExpenses(new Expense[size]);
         setCount(0);
     }
 
-    // Getter and Setter methods for private variables
+    // Public Getter and Setter methods for private variables
     public Expense[] getExpenses() {
         return this.expenses;
     }
 
-    public void setExpenses(Expense[] expenses) {
+    private void setExpenses(Expense[] expenses) { // Private setter
         this.expenses = expenses;
     }
 
@@ -70,10 +78,11 @@ class ExpenseTracker {
         return this.count;
     }
 
-    public void setCount(int count) {
+    private void setCount(int count) {  // Private setter
         this.count = count;
     }
 
+    // Public method to add an expense
     public void addExpense(Expense expense) {
         if (getCount() < getExpenses().length) {
             this.expenses[getCount()] = expense;
@@ -84,16 +93,18 @@ class ExpenseTracker {
         }
     }
 
+    // Public method to list all expenses
     public void listExpenses() {
         if (getCount() == 0) {
             System.out.println("No expenses recorded.");
         } else {
             for (int i = 0; i < getCount(); i++) {
-                System.out.println(getExpenses()[i]);
+                getExpenses()[i].printExpenseDetails();  // Calling protected method from Expense class
             }
         }
     }
 
+    // Public method to list expenses by category
     public void listExpensesByCategory(String category) {
         boolean found = false;
         for (int i = 0; i < getCount(); i++) {
@@ -107,6 +118,7 @@ class ExpenseTracker {
         }
     }
 
+    // Public method to show the summary of expenses
     public void showSummary() {
         double total = 0;
         System.out.println("\nExpense Summary:");
@@ -117,7 +129,6 @@ class ExpenseTracker {
         System.out.println("Total Expenses: Rs. " + total);
     }
 }
-
 
 // Main class for user interaction
 public class Main {
