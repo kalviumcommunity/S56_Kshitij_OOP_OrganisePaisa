@@ -6,7 +6,14 @@ class Expense {
     private double amount;
     private String category;
 
-    // Public constructor
+    // Default constructor (no parameters)
+    public Expense() {
+        this.description = "Unknown";
+        this.amount = 0.0;
+        this.category = "Miscellaneous";
+    }
+
+    // Parameterized constructor (with parameters)
     public Expense(String description, double amount, String category) {
         setDescription(description);  // Using mutators
         setAmount(amount);
@@ -59,7 +66,12 @@ class ExpenseTracker {
     private Expense[] expenses;
     private int count;
 
-    // Public constructor
+    // Default constructor (no parameters)
+    public ExpenseTracker() {
+        this(10); // By default, track up to 10 expenses
+    }
+
+    // Parameterized constructor
     public ExpenseTracker(int size) {
         setExpenses(new Expense[size]);
         setCount(0);
@@ -139,7 +151,14 @@ public class Main {
         int size = scanner.nextInt();
         scanner.nextLine();  // Consume newline
 
-        ExpenseTracker expenseTracker = new ExpenseTracker(size);
+        ExpenseTracker expenseTracker;
+
+        // Using default constructor if the size is not provided or size <= 0
+        if (size <= 0) {
+            expenseTracker = new ExpenseTracker();  // Using the default constructor
+        } else {
+            expenseTracker = new ExpenseTracker(size);  // Using the parameterized constructor
+        }
 
         boolean running = true;
         while (running) {
@@ -160,9 +179,9 @@ public class Main {
                     System.out.print("Enter amount: ");
                     double amount = scanner.nextDouble();
                     scanner.nextLine();  // Consume newline
-                    System.out.print("Enter category (eg., Food, Utilities, Entertainment): ");
+                    System.out.print("Enter category (e.g., Food, Utilities, Entertainment): ");
                     String category = scanner.nextLine();
-                    Expense expense = new Expense(description, amount, category);
+                    Expense expense = new Expense(description, amount, category);  // Using parameterized constructor
                     expenseTracker.addExpense(expense);
                     break;
                 case 2:
@@ -172,7 +191,7 @@ public class Main {
                     expenseTracker.showSummary();
                     break;
                 case 4:
-                    System.out.print("Enter category to list expenses (eg., Food, Utilities, Entertainment): ");
+                    System.out.print("Enter category to list expenses (e.g., Food, Utilities, Entertainment): ");
                     category = scanner.nextLine();
                     expenseTracker.listExpensesByCategory(category);
                     break;
@@ -181,7 +200,7 @@ public class Main {
                     System.out.println("Exiting the expense tracker");
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again");
+                    System.out.println("Invalid choice. Please try again.");
             }
         }
 
