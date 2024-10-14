@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
-// Base class representing each expense entry
-class Expense {
+// Abstract base class representing each expense entry
+abstract class Expense {
     private String description;
     private double amount;
     private String category;
@@ -49,10 +49,8 @@ class Expense {
         this.category = category;
     }
 
-    // Protected method: Only accessible within this class, package, and subclasses
-    protected void printExpenseDetails() {
-        System.out.println("Expense Details: " + getDescription() + ", Rs. " + getAmount() + ", " + getCategory());
-    }
+    // Abstract method (virtual function) to print expense details
+    public abstract void printExpenseDetails();
 
     @Override
     public String toString() {
@@ -78,10 +76,10 @@ class RecurringExpense extends Expense {
         this.frequency = frequency;
     }
 
-    // Overriding printExpenseDetails method
+    // Overriding abstract method from Expense class
     @Override
-    protected void printExpenseDetails() {
-        super.printExpenseDetails();
+    public void printExpenseDetails() {
+        System.out.println("Expense Details: " + getDescription() + ", Rs. " + getAmount() + ", " + getCategory());
         System.out.println("Frequency: " + getFrequency());
     }
 }
@@ -104,10 +102,10 @@ class OneTimeExpense extends Expense {
         this.date = date;
     }
 
-    // Overriding printExpenseDetails method
+    // Overriding abstract method from Expense class
     @Override
-    protected void printExpenseDetails() {
-        super.printExpenseDetails();
+    public void printExpenseDetails() {
+        System.out.println("Expense Details: " + getDescription() + ", Rs. " + getAmount() + ", " + getCategory());
         System.out.println("Date: " + getDate());
     }
 }
@@ -155,7 +153,7 @@ class ExpenseTracker {
 
     // Overloaded addExpense method (Compile-time Polymorphism)
     public void addExpense(String description, double amount, String category) {
-        Expense newExpense = new Expense(description, amount, category);  // Create Expense object
+        Expense newExpense = new OneTimeExpense(description, amount, category, "Unknown Date");  // Create Expense object
         addExpense(newExpense);  // Reusing the other addExpense method
     }
 
@@ -164,7 +162,7 @@ class ExpenseTracker {
             System.out.println("No expenses recorded.");
         } else {
             for (int i = 0; i < getCount(); i++) {
-                getExpenses()[i].printExpenseDetails();  // Calling protected method from Expense class
+                getExpenses()[i].printExpenseDetails();  // Calling overridden method
             }
         }
     }
