@@ -142,6 +142,7 @@ class ExpenseTracker {
         this.count = count;
     }
 
+    // Method overloading to demonstrate polymorphism
     public void addExpense(Expense expense) {
         if (getCount() < getExpenses().length) {
             this.expenses[getCount()] = expense;
@@ -150,6 +151,12 @@ class ExpenseTracker {
         } else {
             System.out.println("Cannot add more expenses. Array is full.");
         }
+    }
+
+    // Overloaded addExpense method (Compile-time Polymorphism)
+    public void addExpense(String description, double amount, String category) {
+        Expense newExpense = new Expense(description, amount, category);  // Create Expense object
+        addExpense(newExpense);  // Reusing the other addExpense method
     }
 
     public void listExpenses() {
