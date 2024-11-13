@@ -46,6 +46,7 @@ abstract class Expense {
         this.category = category;
     }
 
+    // Consistent abstract method for subclasses to implement
     public abstract void printExpenseDetails();
 
     @Override
@@ -73,6 +74,7 @@ class RecurringExpense extends Expense {
 
     @Override
     public void printExpenseDetails() {
+        // Aligns with the base class's functionality, respecting LSP
         System.out.println("Expense Details: " + getDescription() + ", Rs. " + getAmount() + ", " + getCategory());
         System.out.println("Frequency: " + getFrequency());
     }
@@ -97,12 +99,13 @@ class OneTimeExpense extends Expense {
 
     @Override
     public void printExpenseDetails() {
+        // Aligns with the base class's functionality, respecting LSP
         System.out.println("Expense Details: " + getDescription() + ", Rs. " + getAmount() + ", " + getCategory());
         System.out.println("Date: " + getDate());
     }
 }
 
-// New type of expense: GiftExpense (demonstrates Open/Closed Principle)
+// New type of expense: GiftExpense (demonstrates LSP by extending Expense without modifying behavior)
 class GiftExpense extends Expense {
     private String recipient;
 
@@ -121,6 +124,7 @@ class GiftExpense extends Expense {
 
     @Override
     public void printExpenseDetails() {
+        // Aligns with the base class's functionality, respecting LSP
         System.out.println("Expense Details: " + getDescription() + ", Rs. " + getAmount() + ", " + getCategory());
         System.out.println("Recipient: " + getRecipient());
     }
