@@ -49,8 +49,8 @@ abstract class Expense {
         this.category = category;
     }
 
-    // Abstract method (virtual function) to print expense details
-    public abstract void printExpenseDetails();
+    // Abstract method to print expense details using the ExpensePrinter
+    public abstract void accept(ExpensePrinter printer);
 
     @Override
     public String toString() {
@@ -76,11 +76,10 @@ class RecurringExpense extends Expense {
         this.frequency = frequency;
     }
 
-    // Overriding abstract method from Expense class
+    // Overriding accept method for ExpensePrinter
     @Override
-    public void printExpenseDetails() {
-        System.out.println("Expense Details: " + getDescription() + ", Rs. " + getAmount() + ", " + getCategory());
-        System.out.println("Frequency: " + getFrequency());
+    public void accept(ExpensePrinter printer) {
+        printer.printRecurringExpense(this);
     }
 }
 
@@ -102,11 +101,23 @@ class OneTimeExpense extends Expense {
         this.date = date;
     }
 
-    // Overriding abstract method from Expense class
+    // Overriding accept method for ExpensePrinter
     @Override
-    public void printExpenseDetails() {
-        System.out.println("Expense Details: " + getDescription() + ", Rs. " + getAmount() + ", " + getCategory());
-        System.out.println("Date: " + getDate());
+    public void accept(ExpensePrinter printer) {
+        printer.printOneTimeExpense(this);
+    }
+}
+
+// New class responsible for printing expense details (adheres to SRP)
+class ExpensePrinter {
+    public void printRecurringExpense(RecurringExpense expense) {
+        System.out.println("Expense Details: " + expense.getDescription() + ", Rs. " + expense.getAmount() + ", " + expense.getCategory());
+        System.out.println("Frequency: " + expense.getFrequency());
+    }
+
+    public void printOneTimeExpense(OneTimeExpense expense) {
+        System.out.println("Expense Details: " + expense.getDescription() + ", Rs. " + expense.getAmount() + ", " + expense.getCategory());
+        System.out.println("Date: " + expense.getDate());
     }
 }
 
@@ -114,6 +125,7 @@ class OneTimeExpense extends Expense {
 class ExpenseTracker {
     private Expense[] expenses;
     private int count;
+    private ExpensePrinter printer = new ExpensePrinter(); // Add ExpensePrinter instance
 
     public ExpenseTracker() {
         this(10); // By default, track up to 10 expenses
@@ -151,10 +163,9 @@ class ExpenseTracker {
         }
     }
 
-    // Overloaded addExpense method (Compile-time Polymorphism)
     public void addExpense(String description, double amount, String category) {
-        Expense newExpense = new OneTimeExpense(description, amount, category, "Unknown Date");  // Create Expense object
-        addExpense(newExpense);  // Reusing the other addExpense method
+        Expense newExpense = new OneTimeExpense(description, amount, category, "Unknown Date");
+        addExpense(newExpense);
     }
 
     public void listExpenses() {
@@ -162,7 +173,7 @@ class ExpenseTracker {
             System.out.println("No expenses recorded.");
         } else {
             for (int i = 0; i < getCount(); i++) {
-                getExpenses()[i].printExpenseDetails();  // Calling overridden method
+                getExpenses()[i].accept(printer);  // Using the ExpensePrinter to print details
             }
         }
     }
@@ -198,15 +209,9 @@ public class Solution {
 
         System.out.print("Enter the number of expenses you want to track: ");
         int size = scanner.nextInt();
-        scanner.nextLine();  // Consume newline
+        scanner.nextLine();
 
-        ExpenseTracker expenseTracker;
-
-        if (size <= 0) {
-            expenseTracker = new ExpenseTracker();  // Using the default constructor
-        } else {
-            expenseTracker = new ExpenseTracker(size);  // Using the parameterized constructor
-        }
+        ExpenseTracker expenseTracker = size <= 0 ? new ExpenseTracker() : new ExpenseTracker(size);
 
         boolean running = true;
         while (running) {
@@ -219,7 +224,7 @@ public class Solution {
             System.out.println("6. Exit");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
-            scanner.nextLine();  // Consume newline
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -227,7 +232,7 @@ public class Solution {
                     String description = scanner.nextLine();
                     System.out.print("Enter amount: ");
                     double amount = scanner.nextDouble();
-                    scanner.nextLine();  // Consume newline
+                    scanner.nextLine();
                     System.out.print("Enter category (e.g., Food, Utilities, Entertainment): ");
                     String category = scanner.nextLine();
                     System.out.print("Enter date (e.g., 2024-09-15): ");
@@ -240,7 +245,7 @@ public class Solution {
                     description = scanner.nextLine();
                     System.out.print("Enter amount: ");
                     amount = scanner.nextDouble();
-                    scanner.nextLine();  // Consume newline
+                    scanner.nextLine();
                     System.out.print("Enter category (e.g., Food, Utilities, Entertainment): ");
                     category = scanner.nextLine();
                     System.out.print("Enter frequency (e.g., Monthly, Weekly): ");
@@ -267,7 +272,6 @@ public class Solution {
                     System.out.println("Invalid choice. Please try again.");
             }
         }
-
         scanner.close();
     }
 }
